@@ -250,8 +250,56 @@ After we turn off the first endpoint, the envoy starts the procedure of endpoint
 This can be seen on the :health_flags::/failed_active_hc/active_hc_timeout for the first endpoint at 172.24.0.4
 
 Envoy /clusters output:
-
-
+````
+example_proxy_cluster::observability_name::example_proxy_cluster
+example_proxy_cluster::default_priority::max_connections::1024
+example_proxy_cluster::default_priority::max_pending_requests::1024
+example_proxy_cluster::default_priority::max_requests::1024
+example_proxy_cluster::default_priority::max_retries::3
+example_proxy_cluster::high_priority::max_connections::1024
+example_proxy_cluster::high_priority::max_pending_requests::1024
+example_proxy_cluster::high_priority::max_requests::1024
+example_proxy_cluster::high_priority::max_retries::3
+example_proxy_cluster::added_via_api::true
+example_proxy_cluster::172.24.0.4:8080::cx_active::0
+example_proxy_cluster::172.24.0.4:8080::cx_connect_fail::1
+example_proxy_cluster::172.24.0.4:8080::cx_total::2
+example_proxy_cluster::172.24.0.4:8080::rq_active::0
+example_proxy_cluster::172.24.0.4:8080::rq_error::1
+example_proxy_cluster::172.24.0.4:8080::rq_success::2
+example_proxy_cluster::172.24.0.4:8080::rq_timeout::0
+example_proxy_cluster::172.24.0.4:8080::rq_total::2
+example_proxy_cluster::172.24.0.4:8080::hostname::
+example_proxy_cluster::172.24.0.4:8080::health_flags::/failed_active_hc/active_hc_timeout
+example_proxy_cluster::172.24.0.4:8080::weight::1
+example_proxy_cluster::172.24.0.4:8080::region::
+example_proxy_cluster::172.24.0.4:8080::zone::
+example_proxy_cluster::172.24.0.4:8080::sub_zone::
+example_proxy_cluster::172.24.0.4:8080::canary::false
+example_proxy_cluster::172.24.0.4:8080::priority::0
+example_proxy_cluster::172.24.0.4:8080::success_rate::-1.0
+example_proxy_cluster::172.24.0.4:8080::local_origin_success_rate::-1.0
+example_proxy_cluster::172.24.0.5:8080::cx_active::1
+example_proxy_cluster::172.24.0.5:8080::cx_connect_fail::0
+example_proxy_cluster::172.24.0.5:8080::cx_total::1
+example_proxy_cluster::172.24.0.5:8080::rq_active::0
+example_proxy_cluster::172.24.0.5:8080::rq_error::0
+example_proxy_cluster::172.24.0.5:8080::rq_success::5
+example_proxy_cluster::172.24.0.5:8080::rq_timeout::0
+example_proxy_cluster::172.24.0.5:8080::rq_total::5
+example_proxy_cluster::172.24.0.5:8080::hostname::
+example_proxy_cluster::172.24.0.5:8080::health_flags::healthy
+example_proxy_cluster::172.24.0.5:8080::weight::1
+example_proxy_cluster::172.24.0.5:8080::region::
+example_proxy_cluster::172.24.0.5:8080::zone::
+example_proxy_cluster::172.24.0.5:8080::sub_zone::
+example_proxy_cluster::172.24.0.5:8080::canary::false
+example_proxy_cluster::172.24.0.5:8080::priority::0
+example_proxy_cluster::172.24.0.5:8080::success_rate::-1.0
+example_proxy_cluster::172.24.0.5:8080::local_origin_success_rate::-1.0
+````
+Notice that only one endpoint 172.24.0.5 is heathy.
+All requests (curl -s http://localhost:80 | grep served) are routing to healthy endpoint 172.24.0.5
 ````
 admin@ip-172-31-5-70:~/envoy$ curl -s http://localhost:80 | grep served
 Request served by container_c
@@ -260,4 +308,67 @@ admin@ip-172-31-5-70:~/envoy$ curl -s http://localhost:80 | grep served
 Request served by container_c
 admin@ip-172-31-5-70:~/envoy$ curl -s http://localhost:80 | grep served
 Request served by container_c
+
+When disabled endpoint starts again envoy adds it to cluster after 3rd successful HC-request.
+All requests (curl -s http://localhost:80 | grep served) are routing to healthy endpoints 172.24.0.4 and 172.24.0.5
 ````
+admin@ip-172-31-5-70:~/envoy$ curl -s http://localhost:80 | grep served
+Request served by container_c
+admin@ip-172-31-5-70:~/envoy$ curl -s http://localhost:80 | grep served
+Request served by container_d
+admin@ip-172-31-5-70:~/envoy$ curl -s http://localhost:80 | grep served
+Request served by container_c
+````
+Envoy /clusters output:
+````
+example_proxy_cluster::observability_name::example_proxy_cluster
+example_proxy_cluster::default_priority::max_connections::1024
+example_proxy_cluster::default_priority::max_pending_requests::1024
+example_proxy_cluster::default_priority::max_requests::1024
+example_proxy_cluster::default_priority::max_retries::3
+example_proxy_cluster::high_priority::max_connections::1024
+example_proxy_cluster::high_priority::max_pending_requests::1024
+example_proxy_cluster::high_priority::max_requests::1024
+example_proxy_cluster::high_priority::max_retries::3
+example_proxy_cluster::added_via_api::true
+example_proxy_cluster::172.24.0.4:8080::cx_active::1
+example_proxy_cluster::172.24.0.4:8080::cx_connect_fail::1
+example_proxy_cluster::172.24.0.4:8080::cx_total::3
+example_proxy_cluster::172.24.0.4:8080::rq_active::0
+example_proxy_cluster::172.24.0.4:8080::rq_error::1
+example_proxy_cluster::172.24.0.4:8080::rq_success::3
+example_proxy_cluster::172.24.0.4:8080::rq_timeout::0
+example_proxy_cluster::172.24.0.4:8080::rq_total::3
+example_proxy_cluster::172.24.0.4:8080::hostname::
+example_proxy_cluster::172.24.0.4:8080::health_flags::healthy
+example_proxy_cluster::172.24.0.4:8080::weight::1
+example_proxy_cluster::172.24.0.4:8080::region::
+example_proxy_cluster::172.24.0.4:8080::zone::
+example_proxy_cluster::172.24.0.4:8080::sub_zone::
+example_proxy_cluster::172.24.0.4:8080::canary::false
+example_proxy_cluster::172.24.0.4:8080::priority::0
+example_proxy_cluster::172.24.0.4:8080::success_rate::-1.0
+example_proxy_cluster::172.24.0.4:8080::local_origin_success_rate::-1.0
+example_proxy_cluster::172.24.0.5:8080::cx_active::1
+example_proxy_cluster::172.24.0.5:8080::cx_connect_fail::0
+example_proxy_cluster::172.24.0.5:8080::cx_total::1
+example_proxy_cluster::172.24.0.5:8080::rq_active::0
+example_proxy_cluster::172.24.0.5:8080::rq_error::0
+example_proxy_cluster::172.24.0.5:8080::rq_success::12
+example_proxy_cluster::172.24.0.5:8080::rq_timeout::0
+example_proxy_cluster::172.24.0.5:8080::rq_total::12
+example_proxy_cluster::172.24.0.5:8080::hostname::
+example_proxy_cluster::172.24.0.5:8080::health_flags::healthy
+example_proxy_cluster::172.24.0.5:8080::weight::1
+example_proxy_cluster::172.24.0.5:8080::region::
+example_proxy_cluster::172.24.0.5:8080::zone::
+example_proxy_cluster::172.24.0.5:8080::sub_zone::
+example_proxy_cluster::172.24.0.5:8080::canary::false
+example_proxy_cluster::172.24.0.5:8080::priority::0
+example_proxy_cluster::172.24.0.5:8080::success_rate::-1.0
+example_proxy_cluster::172.24.0.5:8080::local_origin_success_rate::-1.0
+````
+Notice: there are two endpoints in cluster again, 172.24.0.4 and 172.24.0.5. All endpoints have health_flags::healthy
+
+
+
