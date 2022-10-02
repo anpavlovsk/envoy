@@ -382,6 +382,3 @@ example_proxy_cluster::172.24.0.5:8080::local_origin_success_rate::-1.0
 Notice: there are two endpoints in cluster again, 172.24.0.4 and 172.24.0.5. All endpoints have health_flags::healthy
 </pre>
 </details>
-
-
-
