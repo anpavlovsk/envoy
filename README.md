@@ -48,8 +48,7 @@ Nginx configuration:
       }
    }
 ````
-
-During this task we will test envoy active health check on cluster with two http endpoins.
+Firstly we will check envoy file based dynamic configuration change.
 
 ### Envoy configuration: ###
 ````
