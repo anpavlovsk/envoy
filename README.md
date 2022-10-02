@@ -244,3 +244,20 @@ example_proxy_cluster::172.24.0.5:8080::local_origin_success_rate::-1.0
 ````
 
 Notice: we have 2 endpoints (172.24.0.4,172.24.0.5) in cluster example_proxy_cluster and they are healthy (health_flags::healthy)
+
+After we turn off the first endpoint, the envoy starts the procedure of endpoint removal from the cluster after the first unsuccessful HC-request.
+
+This can be seen on the :health_flags::/failed_active_hc/active_hc_timeout for the first endpoint at 172.24.0.4
+
+Envoy /clusters output:
+
+
+````
+admin@ip-172-31-5-70:~/envoy$ curl -s http://localhost:80 | grep served
+Request served by container_c
+admin@ip-172-31-5-70:~/envoy$ curl -s http://localhost:80 | grep served
+admin@ip-172-31-5-70:~/envoy$ curl -s http://localhost:80 | grep served
+Request served by container_c
+admin@ip-172-31-5-70:~/envoy$ curl -s http://localhost:80 | grep served
+Request served by container_c
+````
