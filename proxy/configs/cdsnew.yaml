@@ -10,12 +10,12 @@ resources:
       - endpoint:
           address:
             socket_address:
-              address: 172.21.0.4
+              address: 172.24.0.4
               port_value: 8080
       - endpoint:
           address:
             socket_address:
-              address: 172.21.0.5
+              address: 172.24.0.5
               port_value: 8080
   health_checks:
   - timeout: 2s
