@@ -133,7 +133,61 @@ resources:
 
 All components are running locally in docker with the sharing docker bridge network:
 
-````
-````
 
 
+Output
+````
+admin@ip-172-31-5-70:~/envoy$ curl -s http://localhost:80 | grep served
+Request served by container_a
+admin@ip-172-31-5-70:~/envoy$ curl -s http://localhost:80 | grep served
+Request served by container_b
+admin@ip-172-31-5-70:~/envoy$ curl -s http://localhost:80 | grep served
+Request served by container_a
+````
+
+We have a new claster configuration in file cdsnew.yaml:
+
+````
+resources:
+- "@type": type.googleapis.com/envoy.config.cluster.v3.Cluster
+  name: example_proxy_cluster
+  type: STATIC
+  connect_timeout: 5s
+  load_assignment:
+    cluster_name: example_proxy_cluster
+    endpoints:
+    - lb_endpoints:
+      - endpoint:
+          address:
+            socket_address:
+              address: 172.24.0.4
+              port_value: 8080
+      - endpoint:
+          address:
+            socket_address:
+              address: 172.24.0.5
+              port_value: 8080
+  health_checks:
+  - timeout: 2s
+    interval: 1s
+    interval_jitter: 1s
+    unhealthy_threshold: 3
+    healthy_threshold: 3
+    tcp_health_check: {}
+````
+Copy new envoy confuguration to proxy container:
+````
+docker cp /home/admin/envoy/proxy/configs/cdsnew.yaml 56a81e58bcb7:/etc/envoy/cdsnew.yaml
+````
+Replaces cds.yaml with cdsnew.yaml within the container:
+````
+docker compose exec proxy mv /etc/envoy/cdsnew.yaml /etc/envoy/cds.yaml
+````
+````
+admin@ip-172-31-5-70:~/envoy$ curl -s http://localhost:80 | grep served
+Request served by container_d
+admin@ip-172-31-5-70:~/envoy$ curl -s http://localhost:80 | grep served
+Request served by container_c
+admin@ip-172-31-5-70:~/envoy$ curl -s http://localhost:80 | grep served
+Request served by container_d
+````
