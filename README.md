@@ -2,7 +2,7 @@
 Envoy's xDS with Active Health Check discovery
 ## Description ##
 
-![alt text](https://github.com/anpavlovsk/envoy/blob/main/screenshots/envoy.jpg?raw=true) 
+![alt text](https://github.com/anpavlovsk/envoy/blob/main/screenshots/envoy.jpeg?raw=true) 
 
 
 ### Docker-compose ###
