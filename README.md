@@ -193,8 +193,10 @@ Request served by container_d
 ````
 All requests are balancing between endpoints with round robin strategy.
 
-Envoy /clusters output:
-````
+<details>
+<summary>Envoy /clusters output:</summary>
+<pre>$ 
+
 example_proxy_cluster::observability_name::example_proxy_cluster
 example_proxy_cluster::default_priority::max_connections::1024
 example_proxy_cluster::default_priority::max_pending_requests::1024
@@ -241,7 +243,8 @@ example_proxy_cluster::172.24.0.5:8080::canary::false
 example_proxy_cluster::172.24.0.5:8080::priority::0
 example_proxy_cluster::172.24.0.5:8080::success_rate::-1.0
 example_proxy_cluster::172.24.0.5:8080::local_origin_success_rate::-1.0
-````
+</pre>
+</details>
 
 Notice: we have 2 endpoints (172.24.0.4,172.24.0.5) in cluster example_proxy_cluster and they are healthy (health_flags::healthy)
 
