@@ -130,10 +130,7 @@ resources:
     tcp_health_check: {}
 ````
 
-
-All components are running locally in docker with the sharing docker bridge network:
-
-
+All requests (curl -s http://localhost:80 | grep served) are balancing between endpoints with round robin strategy.
 
 Output
 ````
@@ -183,7 +180,7 @@ Replaces cds.yaml with cdsnew.yaml within the container:
 ````
 docker compose exec proxy mv /etc/envoy/cdsnew.yaml /etc/envoy/cds.yaml
 ````
-All requests (curl -s http://localhost:80 | grep served) are balancing between endpoints with round robin strategy.
+NOW All requests (curl -s http://localhost:80 | grep served) are balancing between new endpoints.
 ````
 admin@ip-172-31-5-70:~/envoy$ curl -s http://localhost:80 | grep served
 Request served by container_d
