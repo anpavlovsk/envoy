@@ -1,7 +1,7 @@
 # Envoy's xDS with Active Health Check discovery
 ## Description ##
 
-During this task we will test envoy file based dynamic configuration and active health check on cluster with two http endpoins. 
+During this task we will test below nginx and envoy with file based dynamic configuration and active health check on cluster with two http endpoins. 
 
 ![alt text](https://github.com/anpavlovsk/envoy/blob/main/screenshots/envoy.jpeg?raw=true) 
 
