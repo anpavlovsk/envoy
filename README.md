@@ -183,6 +183,7 @@ Replaces cds.yaml with cdsnew.yaml within the container:
 ````
 docker compose exec proxy mv /etc/envoy/cdsnew.yaml /etc/envoy/cds.yaml
 ````
+All requests (curl -s http://localhost:80 | grep served) are balancing between endpoints with round robin strategy.
 ````
 admin@ip-172-31-5-70:~/envoy$ curl -s http://localhost:80 | grep served
 Request served by container_d
@@ -191,7 +192,7 @@ Request served by container_c
 admin@ip-172-31-5-70:~/envoy$ curl -s http://localhost:80 | grep served
 Request served by container_d
 ````
-All requests are balancing between endpoints with round robin strategy.
+
 
 <details>
 <summary>Envoy /clusters output:</summary>
