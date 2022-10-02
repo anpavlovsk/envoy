@@ -26,7 +26,7 @@ Output
 
 Nginx configuration:
 ````
- upstream backend {
+   upstream backend {
       server 127.0.0.1:10000;
    }
 
@@ -37,9 +37,9 @@ Nginx configuration:
       listen 80;
 
       location / {
-	      resolver 127.0.0.1;
+	resolver 127.0.0.1;
         proxy_pass http://backend;
-	      proxy_http_version 1.1;
+	proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection "upgrade";
       }
