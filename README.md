@@ -195,8 +195,8 @@ All requests are balancing between endpoints with round robin strategy.
 
 <details>
 <summary>Envoy /clusters output:</summary>
-<pre>$ 
-
+<pre>
+````
 example_proxy_cluster::observability_name::example_proxy_cluster
 example_proxy_cluster::default_priority::max_connections::1024
 example_proxy_cluster::default_priority::max_pending_requests::1024
@@ -243,16 +243,19 @@ example_proxy_cluster::172.24.0.5:8080::canary::false
 example_proxy_cluster::172.24.0.5:8080::priority::0
 example_proxy_cluster::172.24.0.5:8080::success_rate::-1.0
 example_proxy_cluster::172.24.0.5:8080::local_origin_success_rate::-1.0
-</pre>
-</details>
+````
 
 Notice: we have 2 endpoints (172.24.0.4,172.24.0.5) in cluster example_proxy_cluster and they are healthy (health_flags::healthy)
+</pre>
+</details>
 
 After we turn off the first endpoint, the envoy starts the procedure of endpoint removal from the cluster after the first unsuccessful HC-request.
 
 This can be seen on the :health_flags::/failed_active_hc/active_hc_timeout for the first endpoint at 172.24.0.4
 
-Envoy /clusters output:
+<details>
+<summary>Envoy /clusters output:</summary>
+<pre>
 ````
 example_proxy_cluster::observability_name::example_proxy_cluster
 example_proxy_cluster::default_priority::max_connections::1024
@@ -302,6 +305,9 @@ example_proxy_cluster::172.24.0.5:8080::success_rate::-1.0
 example_proxy_cluster::172.24.0.5:8080::local_origin_success_rate::-1.0
 ````
 Notice that only one endpoint 172.24.0.5 is heathy.
+</pre>
+</details>
+
 All requests (curl -s http://localhost:80 | grep served) are routing to healthy endpoint 172.24.0.5
 ````
 admin@ip-172-31-5-70:~/envoy$ curl -s http://localhost:80 | grep served
@@ -322,7 +328,9 @@ Request served by container_d
 admin@ip-172-31-5-70:~/envoy$ curl -s http://localhost:80 | grep served
 Request served by container_c
 ````
-Envoy /clusters output:
+<details>
+<summary>Envoy /clusters output:</summary>
+<pre>
 ````
 example_proxy_cluster::observability_name::example_proxy_cluster
 example_proxy_cluster::default_priority::max_connections::1024
@@ -372,6 +380,7 @@ example_proxy_cluster::172.24.0.5:8080::success_rate::-1.0
 example_proxy_cluster::172.24.0.5:8080::local_origin_success_rate::-1.0
 ````
 Notice: there are two endpoints in cluster again, 172.24.0.4 and 172.24.0.5. All endpoints have health_flags::healthy
-
+</pre>
+</details>
 
 
