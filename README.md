@@ -331,6 +331,7 @@ Request served by container_c
 <details>
 <summary>Envoy /clusters output:</summary>
 <pre>
+
 ````
 example_proxy_cluster::observability_name::example_proxy_cluster
 example_proxy_cluster::default_priority::max_connections::1024
